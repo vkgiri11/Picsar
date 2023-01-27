@@ -28,6 +28,7 @@ const Form = ({ currentId, setCurrentId }) => {
 		if (!post?.title) clear();
 
 		if (post) setPostData(post);
+     // eslint-disable-next-line
 	}, [post]);
 
 	const handleSubmit = (event) => {
