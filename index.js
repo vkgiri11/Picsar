@@ -16,9 +16,9 @@ app.use(cors());
 app.use("/posts", postRoutes);
 app.use("/user", userRouter);
 
-app.use(express.static('clint/build'));
+app.use(express.static('client/build'));
 app.get('*', function (req, res) {
-	res.sendFile(path.resolve('admin', 'build', 'index.html'));
+	res.sendFile(path.resolve('client', 'build', 'index.html'));
 });
 
 app.get("/", (req, res) => {
