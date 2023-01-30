@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { TextField, Button, Typography, Paper } from "@material-ui/core";
+import { TextField, Button, Typography, Paper, Tooltip, IconButton } from "@material-ui/core";
 import ChipInput from "material-ui-chip-input";
+import InfoIcon from '@material-ui/icons/Info';
 import FileBase from "react-file-base64";
 
 import { createPost, updatePost } from "../../actions/posts";
@@ -73,8 +74,12 @@ const Form = ({ currentId, setCurrentId }) => {
 
 	return (
 		<Paper className={classes.paper} elevation={6}>
-			<form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-				<Typography variant="h6">{currentId ? "Editing" : "Creating"} a Memory</Typography>
+			<form
+				autoComplete="off"
+				noValidate
+				className={`${classes.root} ${classes.form}`}
+				onSubmit={handleSubmit}>
+				<Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
 				<TextField
 					name="title"
 					variant="outlined"
@@ -93,7 +98,7 @@ const Form = ({ currentId, setCurrentId }) => {
 					value={postData.message}
 					onChange={(event) => setPostData({ ...postData, message: event.target.value })}
 				/>
-				<div style={{ padding: "5px 0", width: "94%" }}>
+				<div style={{ display: 'flex', padding: '5px 0', width: '94%' }}>
 					<ChipInput
 						name="tags"
 						variant="outlined"
@@ -103,6 +108,14 @@ const Form = ({ currentId, setCurrentId }) => {
 						onAdd={(chip) => handleAddChip(chip)}
 						onDelete={(chip) => handleDeleteChip(chip)}
 					/>
+					<Tooltip
+						title={<Typography>Type the Hashtag and press Enter</Typography>}
+						placement="top"
+						arrow>
+						<IconButton>
+							<InfoIcon />
+						</IconButton>
+					</Tooltip>
 				</div>
 				<div className={classes.fileInput}>
 					<FileBase
@@ -117,8 +130,7 @@ const Form = ({ currentId, setCurrentId }) => {
 					color="primary"
 					size="large"
 					type="submit"
-					fullWidth
-				>
+					fullWidth>
 					Submit
 				</Button>
 				<Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>

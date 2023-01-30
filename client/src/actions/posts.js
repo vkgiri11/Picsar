@@ -13,6 +13,8 @@ import {
 
 import * as api from "../api/index.js";
 
+import { toast } from 'react-toastify';
+
 export const getPost = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: START_LOADING });
@@ -65,8 +67,11 @@ export const createPost = (post, history) => async (dispatch) => {
 
 		dispatch({ type: CREATE, payload: data });
 		dispatch({ type: END_LOADING });
+
+    toast.success("Post Created Successfully !!")
 	} catch (error) {
 		console.log(error);
+    toast.error(error.response.data.message)
 	}
 };
 
@@ -75,8 +80,11 @@ export const updatePost = (id, post) => async (dispatch) => {
 		const { data } = await api.updatePost(id, post);
 
 		dispatch({ type: UPDATE, payload: data });
+
+    toast.success("Post Modified Successfully !!")
 	} catch (error) {
 		console.log(error);
+    toast.error(error.response.data.message)
 	}
 };
 
@@ -85,8 +93,11 @@ export const deletePost = (id) => async (dispatch) => {
 		await api.deletePost(id);
 
 		dispatch({ type: DELETE, payload: id });
+
+    toast.success("Post Deleted Successfully !!")
 	} catch (error) {
 		console.log(error);
+    toast.error(error.response.data.message)
 	}
 };
 

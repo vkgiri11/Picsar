@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { Container } from "@material-ui/core";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import Home from "./components/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
@@ -22,6 +24,14 @@ const App = () => {
 					<Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
 				</Switch>
 			</Container>
+      <ToastContainer
+				position="bottom-right"
+				autoClose={2000}
+				limit={3}
+				closeOnClick={true}
+				pauseOnHover={false}
+				pauseOnFocusLoss={false}
+			/>
 		</BrowserRouter>
 	);
 };
