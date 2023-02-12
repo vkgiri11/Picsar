@@ -1,9 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
 import PostMessage from '../models/postMessage.js';
 
 const router = express.Router();
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export const getPosts = async (req, res) => {
     const { page } = req.query;
@@ -50,7 +60,9 @@ export const getPost = async (req, res) => {
 export const createPost = async (req, res) => {
     const post = req.body;
 
-    const newPostMessage = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() })
+    const photoUrl = await cloudinary.uploader.upload(post.selectedFile);
+
+    const newPostMessage = new PostMessage({ ...post, selectedFile: photoUrl.url, creator: req.userId, createdAt: new Date().toISOString() })
 
     try {
         await newPostMessage.save();
@@ -67,7 +79,9 @@ export const updatePost = async (req, res) => {
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-    const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+    const photoUrl = await cloudinary.uploader.upload(selectedFile);
+
+    const updatedPost = { creator, title, message, tags, selectedFile: photoUrl.url, _id: id };
 
     await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
 

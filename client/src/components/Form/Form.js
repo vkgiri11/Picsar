@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import { TextField, Button, Typography, Paper, Tooltip, IconButton } from "@material-ui/core";
 import ChipInput from "material-ui-chip-input";
 import InfoIcon from '@material-ui/icons/Info';
-import FileBase from "react-file-base64";
 
 import { createPost, updatePost } from "../../actions/posts";
 import useStyles from "./styles";
@@ -60,6 +59,17 @@ const Form = ({ currentId, setCurrentId }) => {
 
 	const handleDeleteChip = (chipToDelete) => {
 		setPostData({ ...postData, tags: postData.tags.filter((tag) => tag !== chipToDelete) });
+	};
+
+  const handleImageChange = (file) => {
+		const reader = (readFile) =>
+			new Promise((resolve, reject) => {
+				const fileReader = new FileReader();
+				fileReader.onload = () => resolve(fileReader.result);
+				fileReader.readAsDataURL(readFile);
+			});
+
+		reader(file).then((result) =>{ setPostData({ ...postData, selectedFile: result })});
 	};
 
 	if (!user?.result?.name) {
@@ -118,10 +128,12 @@ const Form = ({ currentId, setCurrentId }) => {
 					</Tooltip>
 				</div>
 				<div className={classes.fileInput}>
-					<FileBase
+					<input
+						accept=".png, .jpg, .jpeg"
 						type="file"
-						multiple={false}
-						onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })}
+						onChange={(e) => {
+							handleImageChange(e.target.files[0]);
+						}}
 					/>
 				</div>
 				<Button
