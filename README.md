@@ -2,6 +2,8 @@
 
 Welcome to Picsar, the ultimate platform for sharing and discovering photos with your friends, family, and the world! 
 
+<img width="798" alt="image" src="https://github.com/vkgiri11/Picsar/assets/61221429/a0fa4df3-c156-4b91-95d8-1f4721504497">
+
 Picsar is a user-friendly photo sharing app that allows you to create, upload, and share your favorite moments with ease. Whether it's a breathtaking sunset, a candid snapshot, or a memorable event, Picsar helps you connect with others through the power of visual storytelling.
 
 ## Features
