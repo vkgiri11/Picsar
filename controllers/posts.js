@@ -59,12 +59,11 @@ export const getPost = async (req, res) => {
 
 export const createPost = async (req, res) => {
     const post = req.body;
-
-    const photoUrl = await cloudinary.uploader.upload(post.selectedFile);
-
-    const newPostMessage = new PostMessage({ ...post, selectedFile: photoUrl.url, creator: req.userId, createdAt: new Date().toISOString() })
-
     try {
+        const photoUrl = await cloudinary.uploader.upload(post.selectedFile);
+
+        const newPostMessage = new PostMessage({ ...post, selectedFile: photoUrl.url, creator: req.userId, createdAt: new Date().toISOString() })
+  
         await newPostMessage.save();
 
         res.status(201).json(newPostMessage);
@@ -79,13 +78,17 @@ export const updatePost = async (req, res) => {
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-    const photoUrl = await cloudinary.uploader.upload(selectedFile);
+    try {
+      const photoUrl = await cloudinary.uploader.upload(selectedFile);
 
-    const updatedPost = { creator, title, message, tags, selectedFile: photoUrl.url, _id: id };
-
-    await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
-
-    res.json(updatedPost);
+      const updatedPost = { creator, title, message, tags, selectedFile: photoUrl.url, _id: id };
+  
+      await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
+  
+      res.json(updatedPost);
+    } catch (error) {
+      res.status(409).json({ message: error.message });
+    }
 }
 
 export const deletePost = async (req, res) => {
