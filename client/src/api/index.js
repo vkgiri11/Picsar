@@ -6,7 +6,9 @@ function getUrl() {
 	// 	return 'http://localhost:5000/api/';
 	// }
 	// return window.location.origin + '/api/';
-  return 'https://picsar.onrender.com' + '/api/'
+  const baseURL = process.env.REACT_APP_BACKEND_BASE_URL;
+
+  return baseURL + '/api/'
 }
 
 const API = axios.create({ baseURL: getUrl() });
