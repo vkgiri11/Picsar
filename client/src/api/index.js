@@ -2,10 +2,11 @@ import axios from "axios";
 
 
 function getUrl() {
-	if (process.env.NODE_ENV === 'development') {
-		return 'http://localhost:5000/api/';
-	}
-	return window.location.origin + '/api/';
+	// if (process.env.NODE_ENV === 'development') {
+	// 	return 'http://localhost:5000/api/';
+	// }
+	// return window.location.origin + '/api/';
+  return 'https://picsar.onrender.com' + '/api/'
 }
 
 const API = axios.create({ baseURL: getUrl() });
