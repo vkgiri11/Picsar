@@ -12,3 +12,13 @@ Picsar is a user-friendly photo sharing app that allows you to create, upload, a
 - **Social Interaction** : Like, comment on, and share photos you love. Follow your favorite photographers to stay updated on their latest uploads.
 - **Discover Feed** : Explore a curated feed of popular and trending photos from users around the globe.
 - **Search** : Find specific photos and users using our powerful search feature.
+
+## Tech Stack
+
+Picsar is built using the following technologies:
+
+- **Frontend** : React.js, Redux, Redux-Thunk
+- **Backend** : Node.js, Express.js, and Cloudinary for image management
+- **Database** : MongoDB for storing users and their posts
+- **Authentication** : JWT (JSON Web Tokens) and Google Oauth for secure user authentication
+- **Styling** : Material UI for responsive design
