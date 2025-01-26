@@ -62,11 +62,17 @@ export const createPost = async (req, res) => {
     try {
         const photoUrl = await cloudinary.uploader.upload(post.selectedFile);
 
-        const newPostMessage = new PostMessage({ ...post, selectedFile: photoUrl.url, creator: req.userId, createdAt: new Date().toISOString() })
-  
-        await newPostMessage.save();
+				const newPostMessage = new PostMessage({
+					...post,
+					selectedFile: photoUrl.url,
+					imagePublicId: photoUrl.public_id,
+					creator: req.userId,
+					createdAt: new Date().toISOString(),
+				});
 
-        res.status(201).json(newPostMessage);
+				await newPostMessage.save();
+
+				res.status(201).json(newPostMessage);
     } catch (error) {
         res.status(409).json({ message: error.message });
     }
@@ -81,7 +87,7 @@ export const updatePost = async (req, res) => {
     try {
       const photoUrl = await cloudinary.uploader.upload(selectedFile);
 
-      const updatedPost = { creator, title, message, tags, selectedFile: photoUrl.url, _id: id };
+      const updatedPost = { creator, title, message, tags, selectedFile: photoUrl.url, imagePublicId: photoUrl.public_id, _id: id };
   
       await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
   
@@ -96,9 +102,17 @@ export const deletePost = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
 
-    await PostMessage.findByIdAndRemove(id);
+    try {
+      const post = await PostMessage.findById(id);
 
-    res.json({ message: "Post deleted successfully." });
+      await cloudinary.uploader.destroy(post.imagePublicId);
+
+      await PostMessage.findByIdAndRemove(id);
+
+      res.json({ message: "Post deleted successfully." });
+    } catch (error) {
+      res.status(409).json({ message: error.message });
+    }
 }
 
 export const likePost = async (req, res) => {
